@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {}
 
+  // 11/4 delete >:)
+
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
