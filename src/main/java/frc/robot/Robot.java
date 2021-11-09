@@ -5,9 +5,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,6 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private final WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
+  private final WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
+  private final WPI_TalonSRX m_frontRight = new WPI_TalonSRX(2);
+  private final WPI_TalonSRX m_rearRight = new WPI_TalonSRX(1);
+  
+  private final MecanumDrive m_driveTrain = new MecanumDrive(m_frontLeft, m_rearLeft, m_frontRight, m_rearRight);
+  private final XboxController m_controller = new XboxController(0);
+ 
 
   /**
    * This function is run when the robot is first started up and should be used for any
