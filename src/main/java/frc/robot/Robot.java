@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static final double kMaxSpeed = 0.5;
+
   private final WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
   private final WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
   private final WPI_TalonSRX m_frontRight = new WPI_TalonSRX(2);
@@ -34,6 +36,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    m_frontLeft.setInverted(true);
+    m_rearRight.setInverted(true);
   }
 
   /**
@@ -67,9 +71,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double ySpeed = deadband(m_controller.getY(Hand.kLeft), 0.2);
+    ySpeed = -Math.pow(ySpeed, 2) * Math.copySign(kMaxSpeed, ySpeed);
     double xSpeed = deadband(m_controller.getX(Hand.kLeft), 0.2);
+    xSpeed = Math.pow(xSpeed, 2) * Math.copySign(kMaxSpeed, xSpeed);
     double zRotation = deadband(m_controller.getX(Hand.kRight), 0.2);
+    zRotation = Math.pow(zRotation, 2) * Math.copySign(kMaxSpeed, zRotation);
     m_driveTrain.driveCartesian(ySpeed, xSpeed, zRotation);
+    System.out.printf("y: %.2f\tx: %.2f\tz: %.2f%n", ySpeed, xSpeed, zRotation);
   }
 
   /** This function is called once when the robot is disabled. */
