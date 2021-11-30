@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final double kMaxSpeed = 0.5;
+  private static final double kMaxSpeed = 1.0;
 
   private final WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
   private final WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
@@ -72,6 +72,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    remotePerodic(false);
+  }
+  
+  private void remotePerodic(boolean testMode) {
     double ySpeed = deadband(m_controller.getY(Hand.kLeft), 0.2);
     ySpeed = -Math.pow(ySpeed, 2) * Math.copySign(kMaxSpeed, ySpeed);
     double xSpeed = deadband(m_controller.getX(Hand.kLeft), 0.2);
@@ -79,8 +83,10 @@ public class Robot extends TimedRobot {
     double zRotation = deadband(m_controller.getX(Hand.kRight), 0.2);
     zRotation = Math.pow(zRotation, 2) * Math.copySign(kMaxSpeed, zRotation);
     //swiched x and y because mecanum says x is forward and y is the right
-    m_driveTrain.driveCartesian(xSpeed, ySpeed, zRotation);
     System.out.printf("y: %.2f\tx: %.2f\tz: %.2f%n", xSpeed, ySpeed, zRotation);
+    if (!testMode) {
+      m_driveTrain.driveCartesian(xSpeed, ySpeed, zRotation);
+    }
   }
 
   /** This function is called once when the robot is disabled. */
@@ -96,6 +102,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    
   }
 
   // 11/4 delete >:)
@@ -103,6 +110,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    remotePerodic(true);
   }
 
   private double deadband(double input, double deadbandRange) {
